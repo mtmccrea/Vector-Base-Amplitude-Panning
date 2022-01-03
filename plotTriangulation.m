@@ -20,7 +20,10 @@ end
 
 Nvert = size(mesh.vert,1);
 
-patch('vertices', mesh.vert, 'faces', mesh.faces, 'facecolor','g', 'FaceAlpha',0.9);
+ptch = patch('vertices', mesh.vert, 'faces', mesh.faces, ...
+    'facecolor',[140, 201, 227]./255, 'facealpha', 0.7, ...
+    'edgecolor', 0.3*[1 1 1], 'edgealpha', 0.8);
+ptch.Annotation.LegendInformation.IconDisplayStyle = 'off'; 
 axis equal
 % number vertices
 for i = 1:Nvert
@@ -34,13 +37,17 @@ for i = 1:Nvert
         temps(i,:) = sprintf('%5i', i);
     end
 end
-text(mesh.vert(:,1), mesh.vert(:,2), mesh.vert(:,3), temps, 'FontSize', 12, 'FontWeight', 'bold');
+txtmesh = mesh.vert * 1.02; % text offset outward from origin
+text(txtmesh(:,1), txtmesh(:,2), txtmesh(:,3)+max(abs(mesh.vert(:)))*0.02*sign(txtmesh(:,3)), temps, 'FontSize', 6);
 % indicate cartesian axes
-line([0;1.5], [0;0], [0;0],'color','r')
-line([0;0], [0;1.5], [0;0],'color','g')
-line([0;0], [0;0], [0;1.5],'color','b')
+line([0;1.5], [0;0], [0;0], 'color', 'r', 'displayname', 'x', 'linewidth', 1.5)
+line([0;-1.5], [0;0], [0;0], 'color', 'r', 'linestyle', ':', 'displayname', '-x', 'linewidth', 1.5)
+line([0;0], [0;1.5], [0;0], 'color', 'g', 'displayname', 'y', 'linewidth', 1.5)
+line([0;0], [0;-1.5], [0;0], 'color', 'g', 'linestyle', ':', 'displayname', '-y', 'linewidth', 1.5)
+line([0;0], [0;0], [0;1.5], 'color', 'b', 'displayname', 'z', 'linewidth', 1.5)
+line([0;0], [0;0], [0;-1.5], 'color', 'b', 'linestyle', ':', 'displayname', '-z', 'linewidth', 1.5)
 set(gca,'visible','off')
 set(findall(h_ax, 'type', 'text'), 'visible', 'on')
-
+lighting gouraud
 end
 
